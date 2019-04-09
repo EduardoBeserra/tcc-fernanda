@@ -1,0 +1,91 @@
+;DT;DP;N;CP;CT;NA;;
+1. Eu gosto do meu trabalho;;;;1;;;;7,5
+2. Eu me sentiria seguro(a) se fosse tratado (a) aqui como paciente.;;;;;1;;;10
+3. Os erros médicos* são tradados de modo apropriado neste hospital.;;;1;;;;;5
+4. Toda informação necessária está disponível, antes do início de um procedimento.;;;1;;;;;5
+5. A administração deste hospital está fazendo um bom trabalho.;;;;1;;;;7,5
+6. A administração deste hospital apoia meus esforços diários.;;;;1;;;;7,5
+7. Eu recebo retorno apropriado sobre o meu desempenho.;;;;1;;;;7,5
+8. Na Sala de Cirurgia é difícil discutir os erros.;;;;1;;;;7,5
+9. A transmissão de informações entre os profissionais do Centro Cirúrgico antes da realização de um procedimento cirúrgico é importante para a segurança do paciente.;;;;;1;;;10
+10. A transmissão de informações é comum no Centro Cirúrgico.;;1;;;;;;2,5
+11. Este hospital é um bom lugar para se trabalhar.;;;;;1;;;10
+12. O cansaço prejudica meu desempenho durante situações de emergência.;1;;;;;;;0
+13. A administração do hospital não compromete, conscientemente, a segurança dos pacientes.;;;1;;;;;5
+14. Neste Centro Cirúrgico o número de profissionais é suficiente para atender o número de pacientes.;;;1;;;;;5
+16. Sou encorajado (a) por meus colegas a informar qualquer preocupação que eu possa ter com a segurança do paciente.;;;1;;;;;5
+15. A tomada de decisão no Centro Cirúrgico utiliza informações dos profissionais envolvidos.;;;;1;;;;7,5
+17. A cultura de segurança neste Centro Cirúrgico torna fácil aprender com os erros dos outros.;;;;1;;;;7,5
+18. O hospital lida de maneira construtiva com os profissionais problemáticos.;;;;;1;;;10
+19. Os equipamentos deste Centro Cirúrgico são adequados.;;;1;;;;;5
+20. Neste Centro Cirúrgico é difícil manifestar-me abertamente se eu percebo um problema envolvendo o cuidado do paciente.;;;;1;;;;7,5
+21. Quando a minha carga de trabalho se torna excessiva, meu desempenho é prejudicado.;;;;1;;;;7,5
+22. Recebo informações adequadas e oportunas sobre ocorrências no hospital, que podem afetar o meu trabalho.;;1;;;;;;2,5
+23. Eu conheço os meios adequados para encaminhar questões relacionadas à segurança do paciente neste Centro Cirúrgico;;;1;;;;;5
+24. Sou menos eficiente no trabalho quando estou cansado (a).;;;1;;;;;5
+25. Eu tenho maior probabilidade de cometer erros em situações tensas ou hostis.;;;;1;;;;7,5
+26. É fácil para os profissionais que atuam neste Centro Cirúrgico fazerem perguntas quando existe algo que não entendem.;;;1;;;;;5
+27. Profissionais conseguem deixar os problemas pessoais para trás, quando estão trabalhando.;;;;;1;;;10
+28. O moral neste Centro Cirúrgico é alto.;;;;;;1;;0
+29. A equipe médica deste Centro Cirúrgico faz um bom trabalho.;;;1;;;;;5
+30. Todo o pessoal do Centro Cirúrgico assume responsabilidade pela segurança do paciente.;;;;1;;;;7,5
+31. Sinto-me cansado (a) quando levanto pela manhã e tenho que enfrentar outro dia de trabalho.;;;;1;;;;7,5
+32. A segurança do paciente é, constantemente, reforçada como prioridade aqui no Centro Cirúrgico.;;1;;;;;;2,5
+33. Eu me sinto exausto (a) com o meu trabalho.;;;;1;;;;7,5
+34. Assuntos importantes são bem comunicados nas mudanças de turno.;;;;1;;;;7,5
+35. Aqui existe adesão ampla às diretrizes clínicas e critérios baseados em evidências relacionados com segurança do paciente.;;;;1;;;;7,5
+36. Sinto me frustrado(a) com o meu trabalho.;;;1;;;;;5
+37. Sinto que estou trabalhando demais.;;;;;1;;;10
+38. As informações obtidas por meio dos relatórios de eventos adversos são usadas para tornar a assistência do paciente mais segura neste Centro Cirúrgico.;;;;1;;;;7,5
+39. O cirurgião ou o cirurgião assistente deveria estar formalmente na coordenação da equipe da Sala Cirúrgica, durante o procedimento cirúrgico.;;;;1;;;;7,5
+40. Falhas na comunicação que levam a atrasos para iniciar os procedimentos cirúrgicos são comuns.;;;;;1;;;10
+41. Você respondeu a essa pesquisa antes? ( ) Sim ( ) Não ( ) Não Sei;;;;;;;;
+;;;;;;;;
+Cargo;;;;;;;;
+Cirurgião/Cirurgião Assistente;;;;;;;;
+Residente de Cirurgia ou Interno;;;;;;;;
+Instrumentador ou Circulante de Sala;;;;;;;;
+Perfusionista;;;;;;;;
+Anestesiologista/Anestesiologista Assistente;;;;;;;;
+Residente de Anestesia ou Interno;;;;;;;;
+Enfermeiro Anestesista;X;;;;;;;
+Auxiliar do Anestesiologista;;;;;;;;
+Enfermeiro de Crntro Cirurgico;;;;;;;;
+Enfermeiro de unidade de RPA;;;;;;;;
+Enfermeiro Assistencial;;;;;;;;
+Enfermeiro Chefe;;;;;;;;
+Equipe de Avaliação pré operatória/pré anestesica;;;;;;;;
+equipe de apoio;;;;;;;;
+outros;;;;;;;;
+;;;;;;;;
+Tempo de Experiencia;6 meses;;;;;;;
+;;;;;;;;
+Regime de trabalho;;;;;;;;
+periodo Integral;X;;;;;;;
+Periodo Parcial;;;;;;;;
+Cooperado;;;;;;;;
+Contratado;;;;;;;;
+Outros;;;;;;;;
+;;;;;;;;
+Grupo étnico;;;;;;;;
+Negro;;;;;;;;
+Indigena;;;;;;;;
+Amarelo;;;;;;;;
+Branco;X;;;;;;;
+Preto;;;;;;;;
+Pardo;;;;;;;;
+Afrodescendente;;;;;;;;
+;;;;;;;;
+Há quanto tempo trabalha neste hospital;2 meses;;;;;;;
+;;;;;;;;
+Idade;44;;;;;;;
+;;;;;;;;
+Turno Habitual;;;;;;;;
+Periodo Integral;;;;;;;;
+Periodo Parcial;;;;;;;;
+Noturno;;;;;;;;
+Turnos Variaveis;X;;;;;;;
+;;;;;;;;
+Sexo;;;;;;;;
+FEM;;;;;;;;
+MAS;X;;;;;;;

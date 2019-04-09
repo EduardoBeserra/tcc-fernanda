@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const diretorio = './arquivos/'
 
+let peso = [0, 25, 50, 75, 100, 0]
 let importPerguntas = false
 let importCargos = false
 let importExp = false
@@ -63,7 +64,8 @@ const importarPergunta = (questionario, linha) => {
     if(dbPerguntas)
         criarObjPergunta(pergunta)
     const {numero, resposta} = pergunta
-    if(resposta)
+
+    if(resposta != undefined)
         questionario.respostas.push({numero, resposta})
 }
 
@@ -305,26 +307,88 @@ const setDominios = () => {
     perguntas[22].dominio = 4
     perguntas[25].dominio = 4
 
-    console.log(perguntas)
+    perguntas[8].dominio = 5
+    perguntas[9].dominio = 5
+    perguntas[15].dominio = 5
+    perguntas[18].dominio = 5
+
+    perguntas[11].dominio = 6
+    perguntas[20].dominio = 6
+    perguntas[23].dominio = 6
+    perguntas[24].dominio = 6
+
+    perguntas[1].dominio = 7
+    perguntas[2].dominio = 7
+    perguntas[3].dominio = 7
+
+    perguntas[1].dominio = 8
+
+    perguntas[7].dominio = 9
+    perguntas[19].dominio = 9
+
+    perguntas[26].dominio = 10
+    perguntas[39].dominio = 10
+
+    perguntas[12].dominio = 11
+
+    perguntas[38].dominio = 12
+        
 }
 
-arquivos = lerDiretorio()
+const importacao = () => {
+    arquivos = lerDiretorio()
 
-arquivos.forEach(arq => {
-    idCargo = 0
-    idRegime = 0
-    idEtnia = 0
-    idTurno = 0
+    arquivos.forEach(arq => {
+        idCargo = 0
+        idRegime = 0
+        idEtnia = 0
+        idTurno = 0
 
-    let questionario = importar(arq)
-    questionarios.push(questionario)
-    dbPerguntas = false
-    dbCargos = false
-    dbRegime = false
-    dbEtnia = false
-    dbTurnos = false
+        let questionario = importar(arq)
+        questionarios.push(questionario)
+        dbPerguntas = false
+        dbCargos = false
+        dbRegime = false
+        dbEtnia = false
+        dbTurnos = false
 
-    importSexo = false
+        importSexo = false
+    })
+
+    setDominios()
+}
+
+importacao()
+
+//Consultas
+
+const getRespostas = dominio => {
+    let pergDom = perguntas.filter(pergunta => {
+        return pergunta.dominio === dominio
+    })
+
+    let respTeste = []
+    pergDom.forEach(perg => {
+        questionarios.forEach(q => {
+            resp = q.respostas.filter(respQuest => {
+                //console.log(`Resp: ${respQuest.numero}: ${respQuest.numero === perg.numero}`)
+                return respQuest.numero === perg.numero
+            })
+            respTeste.push(resp[0])
+        })
+    })
+    return respTeste
+}
+
+const calcValDominio = dominio => {
+    let resp = getRespostas(dominio)
+    let total = 0
+    resp.forEach(r => {
+        total += peso[r.resposta]
+    })
+    return total / resp.length / 10
+}
+
+dominios.forEach(dominio => {
+    console.log(`Dominio: ${dominio.id} - ${dominio.descricao} = ${calcValDominio(dominio.id)}`)
 })
-
-setDominios()
