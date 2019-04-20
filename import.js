@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const diretorio = './arquivos/'
+const diretorio = './arquivos/oficial/'
 
 let peso = [0, 25, 50, 75, 100, 0]
 let importPerguntas = false
@@ -12,12 +12,14 @@ let importTempTrabalho = false
 let importIdade = false
 let importTurno = false
 let importSexo = false
+let importComunicacao = false
 
 let dbPerguntas = true
 let dbCargos = true
 let dbRegime = true
 let dbEtnia = true
 let dbTurnos = true
+let dbComunicacao = true
 
 let perguntas = []
 let cargos = []
@@ -25,6 +27,7 @@ let regimes = []
 let etnias = []
 let turnos = []
 let dominios = []
+let comunicacoes = []
 
 let questionarios = []
 
@@ -32,6 +35,7 @@ let idCargo = 0
 let idRegime = 0
 let idEtnia = 0
 let idTurno = 0
+let idComunicacao = 0
 
 class Questao {
     constructor(linha) {
@@ -47,6 +51,26 @@ class Questao {
         let splLinha = linha.split(';')
         for(let i = 0; i < splLinha.length; i++) {
             if(splLinha[i].toLowerCase() === 'x') {
+                this.resposta = i - 1
+            }
+        }
+    }
+}
+
+
+class RespComunicacao {
+    constructor(id, linha) {
+        linha = linha.replace('"', '')
+        let splitLinha = linha.split(';')
+        this.id = id
+        this.descricao = splitLinha[0]
+        this.getResposta(linha)
+    }
+
+    getResposta(linha) {
+        let splitLinha = linha.split(';')
+        for(let i = 0; i < splitLinha.length; i++) {
+            if(splitLinha[i].toLowerCase() === 'x') {
                 this.resposta = i - 1
             }
         }
@@ -151,6 +175,23 @@ const importarSexo = (questionario, linha) => {
         questionario.sexo = linha.split(';')[0]
 }
 
+const importarComunicacao = (questionario, linha) => {
+    if(linha.match('Comunicação;'))
+        return
+    
+    idComunicacao++
+    descricao = linha.split(';')[0]
+
+    if(descricao) {
+        if(dbComunicacao)
+            comunicacoes.push({id: idComunicacao, descricao})
+
+        let comunicacao = new RespComunicacao(idComunicacao, linha)
+        const {id, resposta} = comunicacao
+        questionario.comunicacoes.push({id, resposta})
+    }
+}
+
 const lerDiretorio = () => {
     files = fs.readdirSync(diretorio)
     return files.filter(file => {
@@ -160,7 +201,8 @@ const lerDiretorio = () => {
 
 const novoQuestionario = () => {
     return {
-        respostas: []
+        respostas: [],
+        comunicacoes: []
     }
 }
 
@@ -200,6 +242,9 @@ const importar = arq => {
         } else if(linha.match('Sexo;')) {
             importTurno = false
             importSexo = true
+        } else if(linha.match('Comunicação;')) {
+            importSexo = false
+            importComunicacao = true
         }
 
         if(importPerguntas)
@@ -220,6 +265,8 @@ const importar = arq => {
             importarTurno(questionario, linha)
         else if(importSexo)
             importarSexo(questionario, linha)
+        else if(importComunicacao)
+            importarComunicacao(questionario, linha)
     })
     return  questionario
 }
@@ -300,7 +347,7 @@ const setDominios = () => {
     perguntas[35].dominio = 3
     perguntas[36].dominio = 3
 
-    perguntas[14].dominio = 4
+    perguntas[15].dominio = 4
     perguntas[16].dominio = 4
     perguntas[17].dominio = 4
     perguntas[21].dominio = 4
@@ -309,7 +356,7 @@ const setDominios = () => {
 
     perguntas[8].dominio = 5
     perguntas[9].dominio = 5
-    perguntas[15].dominio = 5
+    perguntas[14].dominio = 5
     perguntas[18].dominio = 5
 
     perguntas[11].dominio = 6
@@ -352,7 +399,7 @@ const importacao = () => {
         dbEtnia = false
         dbTurnos = false
 
-        importSexo = false
+        importComunicacao = false
     })
 
     setDominios()
@@ -361,7 +408,7 @@ const importacao = () => {
 importacao()
 
 //Consultas
-
+/*
 const getRespostas = dominio => {
     let pergDom = perguntas.filter(pergunta => {
         return pergunta.dominio === dominio
@@ -371,7 +418,6 @@ const getRespostas = dominio => {
     pergDom.forEach(perg => {
         questionarios.forEach(q => {
             resp = q.respostas.filter(respQuest => {
-                //console.log(`Resp: ${respQuest.numero}: ${respQuest.numero === perg.numero}`)
                 return respQuest.numero === perg.numero
             })
             respTeste.push(resp[0])
@@ -392,3 +438,105 @@ const calcValDominio = dominio => {
 dominios.forEach(dominio => {
     console.log(`Dominio: ${dominio.id} - ${dominio.descricao} = ${calcValDominio(dominio.id)}`)
 })
+*/
+
+let caracSexo = { MAS: 0, FEM: 0 }
+let caracTemp = {
+    de6a11m: 0,
+    de1a2a: 0,
+    de3a4a: 0,
+    de5a10a: 0,
+    de11a20a: 0,
+    de21a39a: 0,
+    ausentes: 0
+}
+let caracIdade = {
+    ate30: 0,
+    ate40: 0,
+    ate50: 0,
+    ate60: 0,
+    mais60: 0,
+    ausentes: 0
+}
+
+const calcTempoTrabalho = q => {
+    if(q.tempoTrabalho.toLowerCase().match('mes')) {
+        let txt = q.tempoTrabalho.replace('mes', '')
+        txt = q.tempoTrabalho.replace('es', '')
+        txt = q.tempoTrabalho.replace('MES', '')
+        txt = q.tempoTrabalho.replace('ES', '')
+        let tempo = parseInt(txt, 10)
+        
+        if(tempo >= 6)
+            caracTemp.de6a11m++
+    } else {
+        let txt = q.tempoTrabalho.replace('ano', '')
+        txt = q.tempoTrabalho.replace('s', '')
+        txt = q.tempoTrabalho.replace('ANO', '')
+        txt = q.tempoTrabalho.replace('S', '')
+        let tempo = parseInt(txt, 10) || 0
+        
+        if(tempo == 0)
+            caracTemp.ausentes++
+        else if(tempo <= 2)
+            caracTemp.de1a2a++
+        else if(tempo <= 4)
+            caracTemp.de3a4a++
+        else if(tempo <= 10)
+            caracTemp.de5a10a++
+        else if(tempo <= 20)
+            caracTemp.de11a20a++
+        else if(tempo <= 39)
+            caracTemp.de21a39a++
+            
+    }
+}
+
+const calcFaixaEtaria = q => {
+    let txt = q.idade.replace('ano', '')
+    txt = q.idade.replace('s', '')
+    txt = q.idade.replace('ANO', '')
+    txt = q.idade.replace('S', '')
+    let tempo = parseInt(txt, 10) || 0
+
+    if(tempo == 0)
+        caracIdade.ausentes++
+    else if(tempo <= 30)
+        caracIdade.ate30++
+    else if(tempo <= 40)
+        caracIdade.ate40++
+    else if(tempo <= 50)
+        caracIdade.ate50++
+    else if(tempo <= 60)
+        caracIdade.ate60++
+    else
+        caracIdade.mais60++
+}
+
+questionarios.forEach(q => {
+    caracSexo[q.sexo] = caracSexo[q.sexo] + 1
+    calcTempoTrabalho(q)
+    calcFaixaEtaria(q)
+})
+
+console.log(`Caracteristica        Frequencia       Percentual`)
+console.log('Sexo')
+console.log(`   Feminino                    ${caracSexo['FEM']}              ${caracSexo['FEM'] * 100 / questionarios.length}`)
+console.log(`   Masculino                   ${caracSexo['MAS']}                ${caracSexo['MAS'] * 100 / questionarios.length}`)
+
+console.log(`Tempo de atuação`)
+console.log(`   6 a 11 meses                ${caracTemp.de6a11m}               ${caracTemp.de6a11m * 100 / questionarios.length}`)
+console.log(`   1 a 2 anos                  ${caracTemp.de1a2a}                ${caracTemp.de1a2a * 100 / questionarios.length}`)
+console.log(`   3 a 4 anos                  ${caracTemp.de3a4a}                ${caracTemp.de3a4a * 100 / questionarios.length}`)
+console.log(`   5 a 10 anos                 ${caracTemp.de5a10a}                ${caracTemp.de5a10a * 100 / questionarios.length}`)
+console.log(`   11 a 20 anos                ${caracTemp.de11a20a}               ${caracTemp.de11a20a * 100 / questionarios.length}`)
+console.log(`   21 a 39 anos                ${caracTemp.de21a39a}                ${caracTemp.de21a39a * 100 / questionarios.length}`)
+console.log(`   Ausentes                    ${caracTemp.ausentes}                ${caracTemp.ausentes * 100 / questionarios.length}`)
+
+console.log('Faixa etária')
+console.log(`   Até 30 anos                 ${caracIdade.ate30}                ${caracIdade.ate30 * 100 / questionarios.length}`)
+console.log(`   31 a 40 anos                ${caracIdade.ate40}              ${caracIdade.ate40 * 100 / questionarios.length}`)
+console.log(`   41 a 50 anos                ${caracIdade.ate50}                ${caracIdade.ate50 * 100 / questionarios.length}`)
+console.log(`   51 a 60 anos                ${caracIdade.ate60}                ${caracIdade.ate60 * 100 / questionarios.length}`)
+console.log(`   Mais de 60 anos             ${caracIdade.mais60}                ${caracIdade.mais60 * 100 / questionarios.length}`)
+console.log(`   Ausentes                    ${caracIdade.ausentes}                ${caracIdade.ausentes * 100 / questionarios.length}`)
