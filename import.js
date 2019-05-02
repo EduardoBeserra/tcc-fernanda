@@ -407,39 +407,6 @@ const importacao = () => {
 
 importacao()
 
-//Consultas
-/*
-const getRespostas = dominio => {
-    let pergDom = perguntas.filter(pergunta => {
-        return pergunta.dominio === dominio
-    })
-
-    let respTeste = []
-    pergDom.forEach(perg => {
-        questionarios.forEach(q => {
-            resp = q.respostas.filter(respQuest => {
-                return respQuest.numero === perg.numero
-            })
-            respTeste.push(resp[0])
-        })
-    })
-    return respTeste
-}
-
-const calcValDominio = dominio => {
-    let resp = getRespostas(dominio)
-    let total = 0
-    resp.forEach(r => {
-        total += peso[r.resposta]
-    })
-    return total / resp.length / 10
-}
-
-dominios.forEach(dominio => {
-    console.log(`Dominio: ${dominio.id} - ${dominio.descricao} = ${calcValDominio(dominio.id)}`)
-})
-*/
-
 let caracSexo = { MAS: 0, FEM: 0 }
 let caracTemp = {
     de6a11m: 0,
@@ -458,6 +425,7 @@ let caracIdade = {
     mais60: 0,
     ausentes: 0
 }
+let caracCargo = {}
 
 const calcTempoTrabalho = q => {
     if(q.tempoTrabalho.toLowerCase().match('mes')) {
@@ -513,10 +481,15 @@ const calcFaixaEtaria = q => {
         caracIdade.mais60++
 }
 
+const calcCargo = q => {
+    caracCargo[q.cargo] = caracCargo[q.cargo] || 0 + 1
+}
+
 questionarios.forEach(q => {
     caracSexo[q.sexo] = caracSexo[q.sexo] + 1
     calcTempoTrabalho(q)
     calcFaixaEtaria(q)
+    calcCargo(q)
 })
 
 console.log(`Caracteristica        Frequencia       Percentual`)
@@ -540,3 +513,54 @@ console.log(`   41 a 50 anos                ${caracIdade.ate50}                $
 console.log(`   51 a 60 anos                ${caracIdade.ate60}                ${caracIdade.ate60 * 100 / questionarios.length}`)
 console.log(`   Mais de 60 anos             ${caracIdade.mais60}                ${caracIdade.mais60 * 100 / questionarios.length}`)
 console.log(`   Ausentes                    ${caracIdade.ausentes}                ${caracIdade.ausentes * 100 / questionarios.length}`)
+
+caracCargoAux = Object.keys(caracCargo).map(cc => {
+    return {cargo: cc, cont: caracCargo[cc]}
+})
+console.log('Profissão/Ocupação')
+caracCargoAux.forEach(cc => {
+    let descCargo = cargos.filter(cargo => {
+        return cargo.id == cc.cargo
+    })[0].descricao
+    console.log(`${descCargo}                  ${cc.cont}     ${cc.cont * 100 / questionarios.length}`)
+})
+console.log(`Total                          ${questionarios.length}              100`)
+console.log('')
+console.log('')
+
+const fill = (txt, qtd) => {
+    let strRet = ''
+    for(let i = 0; i < qtd; i++) {
+        strRet += txt
+    }
+    return strRet
+}
+
+dominios.forEach(dominio => {
+    let {descricao} = dominio
+    let total = 0
+    let listResp = []
+    pergdom = perguntas.filter(p => {
+        return p.dominio === dominio.id
+    }).map(p => {
+        return {numero: p.numero}
+    })
+
+
+    pergdom.forEach(perg => {
+        questionarios.forEach(questionario => {
+            respPerg = questionario.respostas.filter(resp => {
+                return resp.numero == perg.numero
+            }).forEach(r => {
+                listResp.push(r)
+            })
+        })
+    })
+
+    total = listResp.map(resp => {
+        return peso[resp.resposta]
+    }).reduce((tot, valor) => {
+        return tot + valor
+    })
+    console.log(`${descricao}${fill(' ', 50 - descricao.length)}${total / listResp.length}`)
+})
