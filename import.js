@@ -481,6 +481,14 @@ const calcFaixaEtaria = q => {
         caracIdade.mais60++
 }
 
+const fill = (txt, qtd) => {
+    let strRet = ''
+    for(let i = 0; i < qtd; i++) {
+        strRet += txt
+    }
+    return strRet
+}
+
 const calcCargo = q => {
     caracCargo[q.cargo] = caracCargo[q.cargo] || 0 + 1
 }
@@ -522,18 +530,40 @@ caracCargoAux.forEach(cc => {
     let descCargo = cargos.filter(cargo => {
         return cargo.id == cc.cargo
     })[0].descricao
-    console.log(`${descCargo}                  ${cc.cont}     ${cc.cont * 100 / questionarios.length}`)
+    console.log(`${descCargo}${fill(' ', 50 - descCargo.length)}${cc.cont}     ${cc.cont * 100 / questionarios.length}`)
 })
-console.log(`Total                          ${questionarios.length}              100`)
+console.log(`Total${fill(' ', 44)} ${questionarios.length}    100`)
 console.log('')
 console.log('')
 
-const fill = (txt, qtd) => {
-    let strRet = ''
-    for(let i = 0; i < qtd; i++) {
-        strRet += txt
+const calcularMediana = valores => {
+    valOrd = valores.sort((a, b) => {
+        return a - b
+    })
+
+    let val = 0
+    if(valOrd.length % 2 == 0) {
+        let num = valOrd.length / 2
+        val = (valOrd[num - 1] + valOrd[num]) / 2
+    } else {
+        let num = (valOrd.length - 1) / 2
+        val = valOrd[num]
     }
-    return strRet
+    return val
+}
+
+const calcularDesvioPadrao = valores => {
+    let media = valores.reduce((tot, valor) => {
+        return tot + valor
+    }) / valores.length
+    let tot = 0
+    valores.forEach(val => {
+        let res = Math.pow((val - media), 2)
+        tot += res
+    })
+    tot = tot / valores.length
+    tot = Math.sqrt(tot)
+    return tot
 }
 
 dominios.forEach(dominio => {
@@ -557,10 +587,13 @@ dominios.forEach(dominio => {
         })
     })
 
-    total = listResp.map(resp => {
+    valores = listResp.map(resp => {
         return peso[resp.resposta]
-    }).reduce((tot, valor) => {
+    })
+    total = valores.reduce((tot, valor) => {
         return tot + valor
     })
-    console.log(`${descricao}${fill(' ', 50 - descricao.length)}${total / listResp.length}`)
+
+    console.log(`${descricao}${fill(' ', 50 - descricao.length)}${(total / listResp.length).toFixed(2)}     ${calcularMediana(valores).toFixed(2)} ${calcularDesvioPadrao(valores).toFixed(2)}`)
+
 })
