@@ -428,22 +428,21 @@ let caracIdade = {
 let caracCargo = {}
 
 const calcTempoTrabalho = q => {
-    if(q.tempoTrabalho.toLowerCase().match('mes')) {
+    if(q.tempoTrabalho.toLowerCase().match('mes') &&
+        !q.tempoTrabalho.toLowerCase().match('ano')) {
         let txt = q.tempoTrabalho.replace('mes', '')
         txt = q.tempoTrabalho.replace('es', '')
         txt = q.tempoTrabalho.replace('MES', '')
         txt = q.tempoTrabalho.replace('ES', '')
         let tempo = parseInt(txt, 10)
-        
-        if(tempo >= 6)
-            caracTemp.de6a11m++
+        //if(tempo >= 6)
+        caracTemp.de6a11m++
     } else {
         let txt = q.tempoTrabalho.replace('ano', '')
         txt = q.tempoTrabalho.replace('s', '')
         txt = q.tempoTrabalho.replace('ANO', '')
         txt = q.tempoTrabalho.replace('S', '')
         let tempo = parseInt(txt, 10) || 0
-        
         if(tempo == 0)
             caracTemp.ausentes++
         else if(tempo <= 2)
@@ -490,7 +489,7 @@ const fill = (txt, qtd) => {
 }
 
 const calcCargo = q => {
-    caracCargo[q.cargo] = caracCargo[q.cargo] || 0 + 1
+    caracCargo[q.cargo] = (caracCargo[q.cargo] || 0) + 1
 }
 
 questionarios.forEach(q => {
@@ -499,29 +498,53 @@ questionarios.forEach(q => {
     calcFaixaEtaria(q)
     calcCargo(q)
 })
+let toExcel = true
 
-console.log(`Caracteristica        Frequencia       Percentual`)
-console.log('Sexo')
-console.log(`   Feminino                    ${caracSexo['FEM']}              ${caracSexo['FEM'] * 100 / questionarios.length}`)
-console.log(`   Masculino                   ${caracSexo['MAS']}                ${caracSexo['MAS'] * 100 / questionarios.length}`)
+if(!toExcel) {
+    console.log(`Caracteristica        Frequencia       Percentual`)
+    console.log('Sexo')
+    console.log(`   Feminino                    ${caracSexo['FEM']}              ${(caracSexo['FEM'] * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`   Masculino                   ${caracSexo['MAS']}              ${(caracSexo['MAS'] * 100 / questionarios.length).toFixed(2)}`)
 
-console.log(`Tempo de atuação`)
-console.log(`   6 a 11 meses                ${caracTemp.de6a11m}               ${caracTemp.de6a11m * 100 / questionarios.length}`)
-console.log(`   1 a 2 anos                  ${caracTemp.de1a2a}                ${caracTemp.de1a2a * 100 / questionarios.length}`)
-console.log(`   3 a 4 anos                  ${caracTemp.de3a4a}                ${caracTemp.de3a4a * 100 / questionarios.length}`)
-console.log(`   5 a 10 anos                 ${caracTemp.de5a10a}                ${caracTemp.de5a10a * 100 / questionarios.length}`)
-console.log(`   11 a 20 anos                ${caracTemp.de11a20a}               ${caracTemp.de11a20a * 100 / questionarios.length}`)
-console.log(`   21 a 39 anos                ${caracTemp.de21a39a}                ${caracTemp.de21a39a * 100 / questionarios.length}`)
-console.log(`   Ausentes                    ${caracTemp.ausentes}                ${caracTemp.ausentes * 100 / questionarios.length}`)
+    console.log(`Tempo de atuação`)
+    console.log(`   ate 11 meses                ${caracTemp.de6a11m}               ${(caracTemp.de6a11m * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`   1 a 2 anos                  ${caracTemp.de1a2a}                ${(caracTemp.de1a2a * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`   3 a 4 anos                  ${caracTemp.de3a4a}                ${(caracTemp.de3a4a * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`   5 a 10 anos                 ${caracTemp.de5a10a}                ${(caracTemp.de5a10a * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`   11 a 20 anos                ${caracTemp.de11a20a}               ${(caracTemp.de11a20a * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`   21 a 39 anos                ${caracTemp.de21a39a}                ${(caracTemp.de21a39a * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`   Ausentes                    ${caracTemp.ausentes}                ${(caracTemp.ausentes * 100 / questionarios.length).toFixed(2)}`)
 
-console.log('Faixa etária')
-console.log(`   Até 30 anos                 ${caracIdade.ate30}                ${caracIdade.ate30 * 100 / questionarios.length}`)
-console.log(`   31 a 40 anos                ${caracIdade.ate40}              ${caracIdade.ate40 * 100 / questionarios.length}`)
-console.log(`   41 a 50 anos                ${caracIdade.ate50}                ${caracIdade.ate50 * 100 / questionarios.length}`)
-console.log(`   51 a 60 anos                ${caracIdade.ate60}                ${caracIdade.ate60 * 100 / questionarios.length}`)
-console.log(`   Mais de 60 anos             ${caracIdade.mais60}                ${caracIdade.mais60 * 100 / questionarios.length}`)
-console.log(`   Ausentes                    ${caracIdade.ausentes}                ${caracIdade.ausentes * 100 / questionarios.length}`)
+    console.log('Faixa etária')
+    console.log(`   Até 30 anos                 ${caracIdade.ate30}                ${(caracIdade.ate30 * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`   31 a 40 anos                ${caracIdade.ate40}              ${(caracIdade.ate40 * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`   41 a 50 anos                ${caracIdade.ate50}                ${(caracIdade.ate50 * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`   51 a 60 anos                ${caracIdade.ate60}                ${(caracIdade.ate60 * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`   Mais de 60 anos             ${caracIdade.mais60}                ${(caracIdade.mais60 * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`   Ausentes                    ${caracIdade.ausentes}                ${(caracIdade.ausentes * 100 / questionarios.length).toFixed(2)}`)
+} else {
+    console.log(`Caracteristica;Frequencia;Percentual`)
+    console.log('Sexo')
+    console.log(`Feminino;${caracSexo['FEM']};${(caracSexo['FEM'] * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`Masculino;${caracSexo['MAS']};${(caracSexo['MAS'] * 100 / questionarios.length).toFixed(2)}`)
 
+    console.log(`Tempo de atuação`)
+    console.log(`ate 11 meses;${caracTemp.de6a11m};${(caracTemp.de6a11m * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`1 a 2 anos;${caracTemp.de1a2a};${(caracTemp.de1a2a * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`3 a 4 anos;${caracTemp.de3a4a};${(caracTemp.de3a4a * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`5 a 10 anos;${caracTemp.de5a10a};${(caracTemp.de5a10a * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`11 a 20 anos;${caracTemp.de11a20a};${(caracTemp.de11a20a * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`21 a 39 anos;${caracTemp.de21a39a};${(caracTemp.de21a39a * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`Ausentes;${caracTemp.ausentes};${(caracTemp.ausentes * 100 / questionarios.length).toFixed(2)}`)
+
+    console.log('Faixa etária')
+    console.log(`Até 30 anos;${caracIdade.ate30};${(caracIdade.ate30 * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`31 a 40 anos;${caracIdade.ate40};${(caracIdade.ate40 * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`41 a 50 anos;${caracIdade.ate50};${(caracIdade.ate50 * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`51 a 60 anos;${caracIdade.ate60};${(caracIdade.ate60 * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`Mais de 60 anos;${caracIdade.mais60};${(caracIdade.mais60 * 100 / questionarios.length).toFixed(2)}`)
+    console.log(`Ausentes;${caracIdade.ausentes};${(caracIdade.ausentes * 100 / questionarios.length).toFixed(2)}`)
+}
 caracCargoAux = Object.keys(caracCargo).map(cc => {
     return {cargo: cc, cont: caracCargo[cc]}
 })
@@ -530,9 +553,15 @@ caracCargoAux.forEach(cc => {
     let descCargo = cargos.filter(cargo => {
         return cargo.id == cc.cargo
     })[0].descricao
-    console.log(`${descCargo}${fill(' ', 50 - descCargo.length)}${cc.cont}     ${cc.cont * 100 / questionarios.length}`)
+    if(!toExcel)
+        console.log(`${descCargo}${fill(' ', 50 - descCargo.length)}${cc.cont}     ${(cc.cont * 100 / questionarios.length).toFixed(2)}`)
+    else
+        console.log(`${descCargo};${cc.cont};${(cc.cont * 100 / questionarios.length).toFixed(2)}`)
 })
-console.log(`Total${fill(' ', 44)} ${questionarios.length}    100`)
+if(!toExcel)
+    console.log(`Total${fill(' ', 44)} ${questionarios.length}    100`)
+else
+    console.log(`Total;${questionarios.length};100`)
 console.log('')
 console.log('')
 
@@ -566,6 +595,11 @@ const calcularDesvioPadrao = valores => {
     return tot
 }
 
+if(!toExcel)
+    console.log('Domínio                                           Média   Mediana Desvio Padrão')
+else
+    console.log('Domínio;Média;Mediana;Desvio Padrão')
+
 dominios.forEach(dominio => {
     let {descricao} = dominio
     let total = 0
@@ -593,7 +627,9 @@ dominios.forEach(dominio => {
     total = valores.reduce((tot, valor) => {
         return tot + valor
     })
-
-    console.log(`${descricao}${fill(' ', 50 - descricao.length)}${(total / listResp.length).toFixed(2)}     ${calcularMediana(valores).toFixed(2)} ${calcularDesvioPadrao(valores).toFixed(2)}`)
+    if(!toExcel)
+        console.log(`${descricao}${fill(' ', 50 - descricao.length)}${(total / listResp.length).toFixed(2)}     ${calcularMediana(valores).toFixed(2)} ${calcularDesvioPadrao(valores).toFixed(2)}`)
+    else
+        console.log(`${descricao};${(total / listResp.length).toFixed(2)};${calcularMediana(valores).toFixed(2)};${calcularDesvioPadrao(valores).toFixed(2)}`)
 
 })
