@@ -392,6 +392,7 @@ const importacao = () => {
         idRegime = 0
         idEtnia = 0
         idTurno = 0
+        idComunicacao = 0
 
         let questionario = importar(arq)
         questionarios.push(questionario)
@@ -400,6 +401,7 @@ const importacao = () => {
         dbRegime = false
         dbEtnia = false
         dbTurnos = false
+        dbComunicacao = false
 
         importComunicacao = false
     })
@@ -658,3 +660,71 @@ cargos.forEach(cargo => {
         console.log('')
     }
 })
+
+const getDescCom = id => {
+    c = comunicacoes.filter(com => {
+        return com.id == id
+    })
+    if (c.length > 0)
+        return c[0].descricao
+    else
+        return ''
+}
+const listarComunicacao = questionarios => {
+    if(questionarios.length == 0)
+        return
+    if(!toExcel)
+        console.log(`Descrição${fill(' ', 51)}Média`)
+    else
+        console.log('Descrição;Média')
+    comunicacoes.forEach(com => {
+        respostas = []
+        questionarios.forEach(q => {
+            q.comunicacoes.filter(c => {
+                return c.id == com.id && c.resposta < 5
+            }).map(respcom => {
+                return peso[respcom.resposta]
+            }).forEach(val => {
+                respostas.push(val)
+            })
+        })
+        if(respostas.length == 0)
+            respostas = [0]
+        if(respostas.length > 0) {
+            total = respostas.reduce((tot, valor) => {
+                return tot + valor
+            })
+        } else
+            total = 0
+
+        let descCom = getDescCom(com.id)
+        if(!toExcel)
+            console.log(`${descCom}${fill(' ', 60 - descCom.length)}${formatarNumero(total / respostas.length)}`)
+        else
+            console.log(`${descCom};${formatarNumero(total / respostas.length)}`)
+    })
+}
+
+console.log('')
+console.log('Comunicação')
+cargos.forEach(cargo => {
+    let descricao = cargos.filter(c => {
+        return c.id == cargo.id
+    })[0].descricao || 'Cargo não identificado'
+    let quests = questionarios.filter(q => {
+        return q.cargo == cargo.id
+    })
+    if(quests.length > 0) {
+        if(!toExcel)
+            console.log(`Cargo: ${descricao}${fill(' ', 50 - descricao.length)}   Qtd:${quests.length}`)
+        else
+        console.log(`Cargo: ${descricao};Qtd:${quests.length}`)
+        listarComunicacao(quests)
+    }
+    console.log('')
+})
+if(!toExcel)
+    console.log(`Geral${fill(' ', 55)}Qtd: ${questionarios.length}`)
+else
+console.log(`Geral;Qtd: ${questionarios.length}`)
+listarComunicacao(questionarios)
