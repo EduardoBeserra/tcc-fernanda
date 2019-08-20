@@ -431,6 +431,9 @@ let caracIdade = {
 }
 let caracCargo = {}
 
+let totalTempoTrabalho = 0
+let totalIdades = 0
+
 const calcTempoTrabalho = q => {
     if(q.tempoTrabalho.toLowerCase().match('mes') &&
         !q.tempoTrabalho.toLowerCase().match('ano')) {
@@ -441,6 +444,7 @@ const calcTempoTrabalho = q => {
         let tempo = parseInt(txt, 10)
         //if(tempo >= 6)
         caracTemp.de6a11m++
+        totalTempoTrabalho += tempo / 12
     } else {
         let txt = q.tempoTrabalho.replace('ano', '')
         txt = q.tempoTrabalho.replace('s', '')
@@ -459,7 +463,7 @@ const calcTempoTrabalho = q => {
             caracTemp.de11a20a++
         else if(tempo <= 39)
             caracTemp.de21a39a++
-            
+        totalTempoTrabalho += tempo
     }
 }
 
@@ -482,6 +486,8 @@ const calcFaixaEtaria = q => {
         caracIdade.ate60++
     else
         caracIdade.mais60++
+
+    totalIdades += tempo
 }
 
 const fill = (txt, qtd) => {
@@ -728,3 +734,73 @@ if(!toExcel)
 else
 console.log(`Geral;Qtd: ${questionarios.length}`)
 listarComunicacao(questionarios)
+
+console.log(totalTempoTrabalho / questionarios.length)
+console.log(totalIdades / questionarios.length)
+
+const mediaExp = () => {
+    let total = 0
+    let tempo
+    questionarios.forEach(q => {
+        if(q.exp.toLowerCase().match('mes') &&
+            !q.exp.toLowerCase().match('ano')) {
+            let txt = q.exp.replace('mes', '')
+            txt = q.exp.replace('es', '')
+            txt = q.exp.replace('MES', '')
+            txt = q.exp.replace('ES', '')
+            tempo = parseInt(txt, 10)
+            total += tempo
+        } else {
+            let txt = q.exp.replace('ano', '')
+            txt = q.exp.replace('s', '')
+            txt = q.exp.replace('ANO', '')
+            txt = q.exp.replace('S', '')
+            tempo = parseInt(txt, 10) || 0
+            tempo = tempo * 12
+            
+            total += tempo
+        }
+    })
+    
+    console.log(total / questionarios.length / 12)
+}
+const percRegimeTrabalho = () => {
+    regimes.forEach(r => {
+        let cont = questionarios.filter(q => {
+            return q.regime === r.id
+        }).length
+
+        console.log(`${r.descricao}${fill(' ', 50 - r.descricao.length)}${cont}   ${formatarNumero(cont / questionarios.length * 100)}`)
+    })
+}
+
+const percGrupoEtnico = () => {
+    etnias.forEach(e => {
+        let cont = questionarios.filter(q => {
+            return q.etnia === e.id
+        }).length
+
+        console.log(`${e.descricao}${fill(' ', 50 - e.descricao.length)}${cont}   ${formatarNumero(cont / questionarios.length * 100)}`)
+    })
+}
+
+const percTurnos = () => {
+    turnos.forEach(t => {
+        let cont = questionarios.filter(q => {
+            return q.turno === t.id
+        }).length
+
+        console.log(`${t.descricao}${fill(' ', 50 - t.descricao.length)}${cont}   ${formatarNumero(cont / questionarios.length * 100)}`)
+    })
+}
+
+console.log('')
+console.log('')
+console.log('')
+mediaExp()
+console.log('Percentual Regime de trabalho')
+percRegimeTrabalho()
+console.log('\nPercentual Grupos Étnicos')
+percGrupoEtnico()
+console.log('\nPercentual Turnos')
+percTurnos()
