@@ -43,7 +43,7 @@ def lerquestionario(arq):
         "respostas": []
     }
 
-    linhas = csv.reader(open(dir + arq), delimiter=";")
+    linhas = csv.reader(open(dir + arq, encoding="UTF-8"), delimiter=";")
     importPerguntas = True
 
     seqPerg = 0
@@ -137,6 +137,7 @@ def importarespec(linha):
         return espec
     else:
         importEspec = False
+
 
 def getresposta(linha):
     i = 1

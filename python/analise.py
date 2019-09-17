@@ -1,4 +1,4 @@
-from importacao import importar, especialidades
+from importacao import importar, especialidades, cargos
 import pandas as pd
 
 arq = ''
@@ -22,9 +22,9 @@ def agrupar(campo, listdesc = None):
 
 
 def get_descricao(lista, index):
-    list_filter = filter(lambda obj: obj['id'] == index, lista)
-    for obj in list_filter:
-        return obj['descricao']
+    list_filter = list(filter(lambda obj: obj['id'] == index, lista))
+    if len(list_filter) > 0:
+        return list_filter[0]['descricao']
     return 'Descricao nao encontrada'
 
 
@@ -41,5 +41,7 @@ imprimir('Atuação Principal')
 agrupar('atuacao')
 imprimir('Tempo na Especialidade')
 agrupar('tempoEspec', especialidades)
+imprimir('Cargo')
+agrupar('cargo', cargos)
 
 print(arq)
