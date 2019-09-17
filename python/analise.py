@@ -1,5 +1,7 @@
-from importacao import importar, especialidades, cargos
 import pandas as pd
+
+from importacao import importar, especialidades, cargos, perguntas
+from dominios import dominios
 
 arq = ''
 
@@ -43,5 +45,31 @@ imprimir('Tempo na Especialidade')
 agrupar('tempoEspec', especialidades)
 imprimir('Cargo')
 agrupar('cargo', cargos)
+imprimir('Total;{qtd};100'.format(qtd=len(questionarios)))
+
+imprimir('')
+imprimir('')
+imprimir('')
+
+dataperg = pd.DataFrame(perguntas)
+
+for c in cargos:
+    resp = data[data['cargo'] == c['id']]['respostas']
+    if resp.count() > 0:
+        imprimir('Cargo: {desc};Qtd Pessoas: {qtd}'.format(desc=c['descricao'], qtd=resp.count()))
+        imprimir('Domínio;Média;Mediana;Desvio Padrão')
+
+        for d in dominios:
+            pdom = dataperg[dataperg['dominio'] == d['id']]
+            imprimir(d['descricao'] + ' e coisas')
+
+        imprimir('')
 
 print(arq)
+
+'''
+dataperg = pd.DataFrame(perguntas)
+for d in dominios:
+    a = dataperg[dataperg['dominio'] == d['id']]
+    print('Dom. {id} - {desc} , qtdPerg: {qtd}, somaPerg: {soma}'.format(id=d['id'], desc=d['descricao'], qtd=d['qtd'], soma=a['id'].count()))
+'''

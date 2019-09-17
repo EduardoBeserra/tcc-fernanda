@@ -1,4 +1,5 @@
 import os, csv
+from dominios import vincular_dominios
 
 dir = "./questionarios/"
 
@@ -25,6 +26,7 @@ def importar():
     for a in arqs:
         questionarios.append(lerquestionario(a))
         importBD = False
+    vincular_dominios(perguntas)
     return questionarios
 
 
