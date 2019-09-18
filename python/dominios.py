@@ -29,19 +29,18 @@ dominios = [{
 }]
 
 
-def vincular_dominios(perguntas):
-    for p in perguntas:
-        if p['id'] <= 6:
-            p['dominio'] = 1
-        elif p['id'] <= 13:
-            p['dominio'] = 2
-        elif p['id'] == 14 or p['id'] >= 38:
-            p['dominio'] = 7
-        elif p['id'] <= 19:
-            p['dominio'] = 3
-        elif p['id'] <= 23:
-            p['dominio'] = 4
-        elif p['id'] <= 34:
-            p['dominio'] = 5
-        elif p['id'] <= 37:
-            p['dominio'] = 6
+def get_dominio(p):
+    if p['id'] <= 6:
+        return 1
+    elif p['id'] <= 13:
+        return 2
+    elif p['id'] == 14 or p['id'] >= 38:
+        return 7
+    elif p['id'] <= 19:
+        return 3
+    elif p['id'] <= 23:
+        return 4
+    elif p['id'] <= 34:
+        return 5
+    elif p['id'] <= 37:
+        return 6

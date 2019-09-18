@@ -1,5 +1,5 @@
 import os, csv
-from dominios import vincular_dominios
+from dominios import get_dominio
 
 dir = "./questionarios/"
 
@@ -26,7 +26,6 @@ def importar():
     for a in arqs:
         questionarios.append(lerquestionario(a))
         importBD = False
-    vincular_dominios(perguntas)
     return questionarios
 
 
@@ -59,7 +58,8 @@ def lerquestionario(arq):
                     perguntas.append(pergunta)
                 resposta = {
                     "id": pergunta["id"],
-                    "resposta": getresposta(linha)
+                    "resposta": getresposta(linha),
+                    'dominio': pergunta['dominio']
                 }
                 questionario["respostas"].append(resposta)
         elif importCargos:
@@ -108,6 +108,7 @@ def importarpergunta(linha):
             ind = linha[0].index(".")
             pergunta["numero"] = int(linha[0][:ind])
             pergunta["descricao"] = linha[0][ind+1:]
+            pergunta['dominio'] = get_dominio(pergunta)
             return pergunta
 
 
