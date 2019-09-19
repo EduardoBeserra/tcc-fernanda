@@ -19,7 +19,7 @@ def agrupar(campo, listdesc = None):
         desc = get_descricao(listdesc, agrupamento.index.values[i]) if listdesc else agrupamento.index.values[i]
 
         imprimir(s.format(desc=desc, qtd=agrupamento.values[i],
-                          perc=round(agrupamento.values[i] / total * 100, 3)))
+                          perc=round(agrupamento.values[i] / total * 100, 2)))
         i += 1
 
 
@@ -78,6 +78,21 @@ for c in cargos:
 
         imprimir('')
 
+for c in cargos:
+    resp = data[data['cargo'] == c['id']]['respostas']
+    if resp.count() > 0:
+        imprimir('Cargo: {desc};Qtd Pessoas: {qtd}'.format(desc=c['descricao'], qtd=resp.count()))
+        imprimir('Domínio;Média;Mediana;Desvio Padrão')
 
+        for p in perguntas:
+            respostas = pd.DataFrame(agrupar_respostas(resp))
+            respostas = respostas[respostas['id'] == p['id']]
+            imprimir('{desc};{media};{mediana};{dp}'.format(
+                desc=str(p['numero']) + '.' + p['descricao'],
+                media=round(respostas['valor'].mean(), 2),
+                mediana=round(respostas['valor'].median(), 2),
+                dp=round(respostas['valor'].std(), 2)))
+
+        imprimir('')
 
 print(arq)
