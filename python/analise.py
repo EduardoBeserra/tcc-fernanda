@@ -60,39 +60,65 @@ imprimir('')
 
 dataperg = pd.DataFrame(perguntas)
 
-for c in cargos:
-    resp = data[data['cargo'] == c['id']] ['respostas']
-    if resp.count() > 0:
-        imprimir('Cargo: {desc};Qtd Pessoas: {qtd}'.format(desc=c['descricao'], qtd=resp.count()))
-        imprimir('Domínio;Média;Mediana;Desvio Padrão')
+# for c in cargos:
+#     resp = data[data['cargo'] == c['id']] ['respostas']
+#     if resp.count() > 0:
+#         imprimir('Cargo: {desc};Qtd Pessoas: {qtd}'.format(desc=c['descricao'], qtd=resp.count()))
+#         imprimir('Domínio;Média;Mediana;Desvio Padrão')
 
-        for d in dominios:
-            respostas = pd.DataFrame(agrupar_respostas(resp))
-            respostas = respostas[respostas['dominio'] == d['id']]
+#         for d in dominios:
+#             respostas = pd.DataFrame(agrupar_respostas(resp))
+#             respostas = respostas[respostas['dominio'] == d['id']]
 
-            imprimir('{desc};{media};{mediana};{dp}'.format(
-                desc=d['descricao'],
-                media=round(respostas['valor'].mean(), 2),
-                mediana=round(respostas['valor'].median(), 2),
-                dp=round(respostas['valor'].std(), 2)))
+#             imprimir('{desc};{media};{mediana};{dp}'.format(
+#                 desc=d['descricao'],
+#                 media=round(respostas['valor'].mean(), 2),
+#                 mediana=round(respostas['valor'].median(), 2),
+#                 dp=round(respostas['valor'].std(), 2)))
 
-        imprimir('')
+#         imprimir('')
 
-for c in cargos:
-    resp = data[data['cargo'] == c['id']]['respostas']
-    if resp.count() > 0:
-        imprimir('Cargo: {desc};Qtd Pessoas: {qtd}'.format(desc=c['descricao'], qtd=resp.count()))
-        imprimir('Domínio;Média;Mediana;Desvio Padrão')
+# for c in cargos:
+#     resp = data[data['cargo'] == c['id']]['respostas']
+#     if resp.count() > 0:
+#         imprimir('Cargo: {desc};Qtd Pessoas: {qtd}'.format(desc=c['descricao'], qtd=resp.count()))
+#         imprimir('Pergunta;Média;Mediana;Desvio Padrão')
 
-        for p in perguntas:
-            respostas = pd.DataFrame(agrupar_respostas(resp))
-            respostas = respostas[respostas['id'] == p['id']]
-            imprimir('{desc};{media};{mediana};{dp}'.format(
-                desc=str(p['numero']) + '.' + p['descricao'],
-                media=round(respostas['valor'].mean(), 2),
-                mediana=round(respostas['valor'].median(), 2),
-                dp=round(respostas['valor'].std(), 2)))
+#         for p in perguntas:
+#             respostas = pd.DataFrame(agrupar_respostas(resp))
+#             respostas = respostas[respostas['id'] == p['id']]
+#             imprimir('{desc};{media};{mediana};{dp}'.format(
+#                 desc=str(p['numero']) + '.' + p['descricao'],
+#                 media=round(respostas['valor'].mean(), 2),
+#                 mediana=round(respostas['valor'].median(), 2),
+#                 dp=round(respostas['valor'].std(), 2)))
 
-        imprimir('')
+#         imprimir('')
+
+resp = pd.DataFrame(agrupar_respostas(data['respostas']))
+
+imprimir('Total Geral;Qtd Pessoas: {qtd}'.format(qtd=data['respostas'].count()))
+imprimir('Domínio;Média;Mediana;Desvio Padrão')
+for d in dominios:    
+    respostas = resp[resp['dominio'] == d['id']]
+    imprimir('{desc};{media};{mediana};{dp}'.format(
+        desc=d['descricao'],
+        media=round(respostas['valor'].mean(), 2),
+        mediana=round(respostas['valor'].median(), 2),
+        dp=round(respostas['valor'].std(), 2)
+    ))
+
+imprimir('')
+
+imprimir('Total Geral;Qtd Pessoas: {qtd}'.format(qtd=data['respostas'].count()))
+imprimir('Pergunta;Média;Mediana;Desvio Padrão')
+for p in perguntas:
+    respostas = resp[resp['id'] == p['id']]
+    imprimir('{desc};{media};{mediana};{dp}'.format(
+        desc=str(p['numero']) + '.' + p['descricao'],
+        media=round(respostas['valor'].mean(), 2),
+        mediana=round(respostas['valor'].median(), 2),
+        dp=round(respostas['valor'].std(), 2)
+    ))
 
 print(arq)
