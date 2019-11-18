@@ -649,6 +649,19 @@ const tabelaDados = questionarios => {
                 `${formatarNumero(calcularDesvioPadrao(valores))}`)
 
     })
+
+    let listResp = []
+    questionarios.forEach(q => {
+        let listRespQ = q.respostas.map(resp => {
+            return peso[resp.resposta]
+        })
+        Array.prototype.push.apply(listResp, listRespQ)
+    })
+    let total = listResp.reduce((ant, valor) => {
+        return ant + valor
+    })
+
+    console.log(`Geral;${formatarNumero(total / listResp.length)};${calcularMediana(listResp)};${formatarNumero(calcularDesvioPadrao(listResp))}`)
 }
 
 console.log('')
@@ -666,6 +679,10 @@ cargos.forEach(cargo => {
         console.log('')
     }
 })
+
+console.log('')
+console.log('Geral por Domínios')
+tabelaDados(questionarios)
 
 const getDescCom = id => {
     c = comunicacoes.filter(com => {
@@ -705,9 +722,10 @@ const listarComunicacao = questionarios => {
 
         let descCom = getDescCom(com.id)
         if(!toExcel)
-            console.log(`${descCom}${fill(' ', 60 - descCom.length)}${formatarNumero(total / respostas.length)}`)
+            console.log(`${descCom}${fill(' ', 60 - descCom.length)}${formatarNumero(total / respostas.length)}${fill(' ', 5)}` +
+                `${formatarNumero(calcularDesvioPadrao(respostas))}`)
         else
-            console.log(`${descCom};${formatarNumero(total / respostas.length)}`)
+            console.log(`${descCom};${formatarNumero(total / respostas.length)};${formatarNumero(calcularDesvioPadrao(respostas))}`)
     })
 }
 
@@ -732,11 +750,11 @@ cargos.forEach(cargo => {
 if(!toExcel)
     console.log(`Geral${fill(' ', 55)}Qtd: ${questionarios.length}`)
 else
-console.log(`Geral;Qtd: ${questionarios.length}`)
+    console.log(`Geral;Qtd: ${questionarios.length}`)
 listarComunicacao(questionarios)
 
-console.log(totalTempoTrabalho / questionarios.length)
-console.log(totalIdades / questionarios.length)
+//console.log(totalTempoTrabalho / questionarios.length)
+//console.log(totalIdades / questionarios.length)
 
 const mediaExp = () => {
     let total = 0
@@ -769,8 +787,10 @@ const percRegimeTrabalho = () => {
         let cont = questionarios.filter(q => {
             return q.regime === r.id
         }).length
-
-        console.log(`${r.descricao}${fill(' ', 50 - r.descricao.length)}${cont}   ${formatarNumero(cont / questionarios.length * 100)}`)
+        if(!toExcel)
+            console.log(`${r.descricao}${fill(' ', 50 - r.descricao.length)}${cont}   ${formatarNumero(cont / questionarios.length * 100)}`)
+        else
+            console.log(`${r.descricao};${cont};${formatarNumero(cont / questionarios.length * 100)}`)
     })
 }
 
@@ -779,8 +799,10 @@ const percGrupoEtnico = () => {
         let cont = questionarios.filter(q => {
             return q.etnia === e.id
         }).length
-
-        console.log(`${e.descricao}${fill(' ', 50 - e.descricao.length)}${cont}   ${formatarNumero(cont / questionarios.length * 100)}`)
+        if(!toExcel)
+            console.log(`${e.descricao}${fill(' ', 50 - e.descricao.length)}${cont}   ${formatarNumero(cont / questionarios.length * 100)}`)
+        else
+            console.log(`${e.descricao};${cont};${formatarNumero(cont / questionarios.length * 100)}`)
     })
 }
 
@@ -789,15 +811,17 @@ const percTurnos = () => {
         let cont = questionarios.filter(q => {
             return q.turno === t.id
         }).length
-
-        console.log(`${t.descricao}${fill(' ', 50 - t.descricao.length)}${cont}   ${formatarNumero(cont / questionarios.length * 100)}`)
+        if(!toExcel)
+            console.log(`${t.descricao}${fill(' ', 50 - t.descricao.length)}${cont}   ${formatarNumero(cont / questionarios.length * 100)}`)
+        else
+            console.log(`${t.descricao};${cont};${formatarNumero(cont / questionarios.length * 100)}`)
     })
 }
 
 console.log('')
 console.log('')
 console.log('')
-mediaExp()
+//mediaExp()
 console.log('Percentual Regime de trabalho')
 percRegimeTrabalho()
 console.log('\nPercentual Grupos Étnicos')

@@ -120,5 +120,9 @@ for p in perguntas:
         mediana=round(respostas['valor'].median(), 2),
         dp=round(respostas['valor'].std(), 2)
     ))
+imprimir('')
+imprimir(resp['valor'].mean())
+imprimir(resp['valor'].median())
+imprimir(resp['valor'].std())
 
 print(arq)
