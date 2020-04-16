@@ -30,12 +30,13 @@ def get_descricao(lista, index):
     return 'Descricao nao encontrada'
 
 
-def agrupar_respostas(resp):
+def agrupar_respostas(resp, cargoid = 0):
     listResp = []
     for r in resp.values:
         listResp += r
     for resp in listResp:
         resp['valor'] = peso[resp['resposta'] if resp['resposta'] else 0]
+        resp['cargo'] = cargoid
     return listResp
 
 
@@ -125,4 +126,33 @@ imprimir(resp['valor'].mean())
 imprimir(resp['valor'].median())
 imprimir(resp['valor'].std())
 
-print(arq)
+#print(arq)
+
+dom = sorted(dominios, key=lambda d: d['ordem'])
+
+txt = 'Categoria Profissional;'
+for d in dom:
+    txt += d['descricao'] + ';'
+txt += 'Total;DP;\n'
+
+for c in cargos:
+    txt += c['descricao'] + ';'
+    respostas = data[data['cargo'] == c['id']]['respostas']
+    tmp = pd.DataFrame(agrupar_respostas(respostas, c['id']))
+    if not tmp.empty:
+        for d in dom:
+            resp = tmp[tmp['dominio'] == d['id']]
+            val = round(resp['valor'].mean(), 2)
+            txt += str(val) + ';'
+        txt += str(round(tmp['valor'].mean(), 2)) + ';'
+        txt += str(round(tmp['valor'].std(), 2)) + ';'
+    txt += '\n'
+
+txt += 'Geral;'
+tmp = pd.DataFrame(agrupar_respostas(data['respostas']))
+for d in dom:
+    resp = tmp[tmp['dominio'] == d['id']]
+    txt += str(round(resp['valor'].mean(), 2)) + ';'
+txt += str(round(tmp['valor'].mean(), 2)) + ';'
+txt += str(round(tmp['valor'].std(), 2)) + ';'
+print(txt)

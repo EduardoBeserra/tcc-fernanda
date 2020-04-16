@@ -370,7 +370,7 @@ const setDominios = () => {
     perguntas[2].dominio = 7
     perguntas[3].dominio = 7
 
-    perguntas[1].dominio = 8
+    perguntas[0].dominio = 8
 
     perguntas[7].dominio = 9
     perguntas[19].dominio = 9

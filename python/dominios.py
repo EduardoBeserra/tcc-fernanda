@@ -1,31 +1,38 @@
 dominios = [{
     'id': 1,
     'descricao': 'Trabalho em equipe',
-    'qtd': 6
+    'qtd': 6,
+    'ordem': 2
 }, {
     'id': 2,
     'descricao': 'Clima de segurança',
-    'qtd': 7
+    'qtd': 7,
+    'ordem': 5
 }, {
     'id': 3,
     'descricao': 'Satisfação no trabalho',
-    'qtd': 5
+    'qtd': 5,
+    'ordem': 1
 }, {
     'id': 4,
     'descricao': 'Percepção de estresse',
-    'qtd': 4
+    'qtd': 4,
+    'ordem': 3
 }, {
     'id': 5,
     'descricao': 'Percepção de gerência',
-    'qtd': 11 #6
+    'qtd': 11, #6
+    'ordem': 7
 }, {
     'id': 6,
     'descricao': 'Condição de trabalho',
-    'qtd': 3
+    'qtd': 3,
+    'ordem': 6
 }, {
     'id': 7,
     'descricao': 'Fator',
-    'qtd': 5
+    'qtd': 5,
+    'ordem': 4
 }]
 
 
