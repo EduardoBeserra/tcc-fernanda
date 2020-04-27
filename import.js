@@ -51,8 +51,8 @@ class Questao {
 
     getResposta(linha) {
         let splLinha = linha.split(';')
-        for(let i = 0; i < splLinha.length; i++) {
-            if(splLinha[i].toLowerCase() === 'x') {
+        for (let i = 0; i < splLinha.length; i++) {
+            if (splLinha[i].toLowerCase() === 'x') {
                 this.resposta = i - 1
             }
         }
@@ -71,8 +71,8 @@ class RespComunicacao {
 
     getResposta(linha) {
         let splitLinha = linha.split(';')
-        for(let i = 0; i < splitLinha.length; i++) {
-            if(splitLinha[i].toLowerCase() === 'x') {
+        for (let i = 0; i < splitLinha.length; i++) {
+            if (splitLinha[i].toLowerCase() === 'x') {
                 this.resposta = i - 1
             }
         }
@@ -80,117 +80,123 @@ class RespComunicacao {
 }
 
 const criarObjPergunta = pergunta => {
-    const {numero, questao} = pergunta
-    if(questao)
-        perguntas.push({numero, questao})
+    const { numero, questao } = pergunta
+    if (questao)
+        perguntas.push({ numero, questao })
 }
 
 const importarPergunta = (questionario, linha) => {
     let pergunta = new Questao(linha)
-    if(dbPerguntas)
+    if (dbPerguntas)
         criarObjPergunta(pergunta)
-    const {numero, resposta} = pergunta
+    const { numero, resposta } = pergunta
 
-    if(resposta != undefined)
-        questionario.respostas.push({numero, resposta})
+    if (resposta != undefined)
+        questionario.respostas.push({ numero, resposta })
 }
 
 const importarCargos = (questionario, linha) => {
-    if(linha.match('Cargo;'))
+    if (linha.match('Cargo;'))
         return
 
     idCargo++
-    if(dbCargos) {
+    if (dbCargos) {
         descricao = linha.split(';')[0]
-        if(descricao)
+        if (descricao)
             cargos.push({ id: idCargo, descricao })
     }
-    if(linha.split(';')[1].toLowerCase() === 'x')
+    if (linha.split(';')[1].toLowerCase() === 'x')
         questionario.cargo = idCargo
 }
 
 const importarExp = (questionario, linha) => {
     let tempo = linha.split(';')[1]
-    if(tempo)
+    if (tempo)
         questionario.exp = tempo
 }
 
 const importarRegime = (questionario, linha) => {
-    if(linha.match('Regime de trabalho;'))
+    if (linha.match('Regime de trabalho;'))
         return
 
     idRegime++
-    if(dbRegime) {
+    if (dbRegime) {
         descricao = linha.split(';')[0]
-        if(descricao)
+        if (descricao)
             regimes.push({ id: idRegime, descricao })
     }
-    if(linha.split(';')[1].toLowerCase() === 'x')
+    if (linha.split(';')[1].toLowerCase() === 'x')
         questionario.regime = idRegime
 }
 
 const importarEtnia = (questionario, linha) => {
-    if(linha.match('Grupo étnico;'))
+    if (linha.match('Grupo étnico;'))
         return
 
     idEtnia++
-    if(dbEtnia) {
+    if (dbEtnia) {
         descricao = linha.split(';')[0]
-        if(descricao)
+        if (descricao)
             etnias.push({ id: idEtnia, descricao })
     }
-    if(linha.split(';')[1].toLowerCase() === 'x')
+    if (linha.split(';')[1].toLowerCase() === 'x')
         questionario.etnia = idEtnia
 }
 
 const importarTempoTrabalho = (questionario, linha) => {
     tempo = linha.split(';')[1]
-    if(tempo)
+    if (tempo)
         questionario.tempoTrabalho = tempo
 }
 
 const importarIdade = (questionario, linha) => {
     idade = linha.split(';')[1]
-    if(idade)
+    if (idade)
         questionario.idade = idade
 }
 
 const importarTurno = (questionario, linha) => {
-    if(linha.match('Turno Habitual;'))
+    if (linha.match('Turno Habitual;'))
         return
-    
+
     idTurno++
-    if(dbTurnos) {
+    if (dbTurnos) {
         descricao = linha.split(';')[0]
-        if(descricao)
+        if (descricao)
             turnos.push({ id: idTurno, descricao })
     }
-    if(linha.split(';')[1].toLowerCase() === 'x')
+    if (linha.split(';')[1].toLowerCase() === 'x')
         questionario.turno = idTurno
 }
 
 const importarSexo = (questionario, linha) => {
-    if(linha.match('Sexo;'))
+    if (linha.match('Sexo;'))
         return
 
-    if(linha.split(';')[1] && linha.split(';')[1].toLowerCase() === 'x')
+    if (linha.split(';')[1] && linha.split(';')[1].toLowerCase() === 'x')
         questionario.sexo = linha.split(';')[0]
 }
 
 const importarComunicacao = (questionario, linha) => {
-    if(linha.match('Comunicação;'))
+    let idaux = 0
+
+    if (linha.match('Comunicação;'))
         return
-    
+
     idComunicacao++
+    //Aqui
+    if (idComunicacao === 4)
+        idaux = 0
+
     descricao = linha.split(';')[0]
 
-    if(descricao) {
-        if(dbComunicacao)
-            comunicacoes.push({id: idComunicacao, descricao})
+    if (descricao) {
+        if (dbComunicacao)
+            comunicacoes.push({ id: idComunicacao, descricao })
 
         let comunicacao = new RespComunicacao(idComunicacao, linha)
-        const {id, resposta} = comunicacao
-        questionario.comunicacoes.push({id, resposta})
+        const { id, resposta } = comunicacao
+        questionario.comunicacoes.push({ id, resposta })
     }
 }
 
@@ -216,61 +222,61 @@ const importar = arq => {
     questionario.arquivo = arq
 
     linhas.forEach(linha => {
-        if(linha.match(';DT;DP')) {
+        if (linha.match(';DT;DP')) {
             importPerguntas = true
             return
         }
-        else if(linha.match('Cargo;')) {
+        else if (linha.match('Cargo;')) {
             importPerguntas = false
             importCargos = true
-        } else if(linha.match('Tempo de Experiencia;')) {
+        } else if (linha.match('Tempo de Experiencia;')) {
             importCargos = false
             importExp = true
-        } else if(linha.match('Regime de trabalho;')) {
+        } else if (linha.match('Regime de trabalho;')) {
             importExp = false
             importRegime = true
-        } else if(linha.match('Grupo étnico;')) {
+        } else if (linha.match('Grupo étnico;')) {
             importRegime = false
             importEtnia = true
-        } else if(linha.match('trabalha neste hospital;')) {
+        } else if (linha.match('trabalha neste hospital;')) {
             importEtnia = false
             importTempTrabalho = true
-        } else if(linha.match('Idade;')) {
+        } else if (linha.match('Idade;')) {
             importTempTrabalho = false
             importIdade = true
-        } else if(linha.match('Turno Habitual;')) {
+        } else if (linha.match('Turno Habitual;')) {
             importIdade = false
             importTurno = true
-        } else if(linha.match('Sexo;')) {
+        } else if (linha.match('Sexo;')) {
             importTurno = false
             importSexo = true
-        } else if(linha.match('Comunicação;')) {
+        } else if (linha.match('Comunicação;')) {
             importSexo = false
             importComunicacao = true
         }
 
-        if(importPerguntas)
+        if (importPerguntas)
             importarPergunta(questionario, linha)
-        else if(importCargos)
+        else if (importCargos)
             importarCargos(questionario, linha)
-        else if(importExp)
+        else if (importExp)
             importarExp(questionario, linha)
-        else if(importRegime)
+        else if (importRegime)
             importarRegime(questionario, linha)
-        else if(importEtnia)
+        else if (importEtnia)
             importarEtnia(questionario, linha)
-        else if(importTempTrabalho)
+        else if (importTempTrabalho)
             importarTempoTrabalho(questionario, linha)
-        else if(importIdade)
+        else if (importIdade)
             importarIdade(questionario, linha)
-        else if(importTurno)
+        else if (importTurno)
             importarTurno(questionario, linha)
-        else if(importSexo)
+        else if (importSexo)
             importarSexo(questionario, linha)
-        else if(importComunicacao)
+        else if (importComunicacao)
             importarComunicacao(questionario, linha)
     })
-    return  questionario
+    return questionario
 }
 
 const getPergunta = numero => {
@@ -381,7 +387,7 @@ const setDominios = () => {
     perguntas[12].dominio = 11
 
     perguntas[38].dominio = 12
-        
+
 }
 
 const importacao = () => {
@@ -435,7 +441,7 @@ let totalTempoTrabalho = 0
 let totalIdades = 0
 
 const calcTempoTrabalho = q => {
-    if(q.tempoTrabalho.toLowerCase().match('mes') &&
+    if (q.tempoTrabalho.toLowerCase().match('mes') &&
         !q.tempoTrabalho.toLowerCase().match('ano')) {
         let txt = q.tempoTrabalho.replace('mes', '')
         txt = q.tempoTrabalho.replace('es', '')
@@ -451,17 +457,17 @@ const calcTempoTrabalho = q => {
         txt = q.tempoTrabalho.replace('ANO', '')
         txt = q.tempoTrabalho.replace('S', '')
         let tempo = parseInt(txt, 10) || 0
-        if(tempo == 0)
+        if (tempo == 0)
             caracTemp.ausentes++
-        else if(tempo <= 2)
+        else if (tempo <= 2)
             caracTemp.de1a2a++
-        else if(tempo <= 4)
+        else if (tempo <= 4)
             caracTemp.de3a4a++
-        else if(tempo <= 10)
+        else if (tempo <= 10)
             caracTemp.de5a10a++
-        else if(tempo <= 20)
+        else if (tempo <= 20)
             caracTemp.de11a20a++
-        else if(tempo <= 39)
+        else if (tempo <= 39)
             caracTemp.de21a39a++
         totalTempoTrabalho += tempo
     }
@@ -474,15 +480,15 @@ const calcFaixaEtaria = q => {
     txt = q.idade.replace('S', '')
     let tempo = parseInt(txt, 10) || 0
 
-    if(tempo == 0)
+    if (tempo == 0)
         caracIdade.ausentes++
-    else if(tempo <= 30)
+    else if (tempo <= 30)
         caracIdade.ate30++
-    else if(tempo <= 40)
+    else if (tempo <= 40)
         caracIdade.ate40++
-    else if(tempo <= 50)
+    else if (tempo <= 50)
         caracIdade.ate50++
-    else if(tempo <= 60)
+    else if (tempo <= 60)
         caracIdade.ate60++
     else
         caracIdade.mais60++
@@ -492,7 +498,7 @@ const calcFaixaEtaria = q => {
 
 const fill = (txt, qtd) => {
     let strRet = ''
-    for(let i = 0; i < qtd; i++) {
+    for (let i = 0; i < qtd; i++) {
         strRet += txt
     }
     return strRet
@@ -513,7 +519,7 @@ questionarios.forEach(q => {
     calcCargo(q)
 })
 
-if(!toExcel) {
+if (!toExcel) {
     console.log(`Caracteristica        Frequencia       Percentual`)
     console.log('Sexo')
     console.log(`   Feminino                    ${caracSexo['FEM']}              ${formatarNumero(caracSexo['FEM'] * 100 / questionarios.length)}`)
@@ -559,19 +565,19 @@ if(!toExcel) {
     console.log(`Ausentes;${caracIdade.ausentes};${formatarNumero(caracIdade.ausentes * 100 / questionarios.length)}`)
 }
 caracCargoAux = Object.keys(caracCargo).map(cc => {
-    return {cargo: cc, cont: caracCargo[cc]}
+    return { cargo: cc, cont: caracCargo[cc] }
 })
 console.log('Profissão/Ocupação')
 caracCargoAux.forEach(cc => {
     let descCargo = cargos.filter(cargo => {
         return cargo.id == cc.cargo
     })[0].descricao
-    if(!toExcel)
+    if (!toExcel)
         console.log(`${descCargo}${fill(' ', 50 - descCargo.length)}${cc.cont}     ${formatarNumero(cc.cont * 100 / questionarios.length)}`)
     else
         console.log(`${descCargo};${cc.cont};${formatarNumero(cc.cont * 100 / questionarios.length)}`)
 })
-if(!toExcel)
+if (!toExcel)
     console.log(`Total${fill(' ', 44)} ${questionarios.length}    100`)
 else
     console.log(`Total;${questionarios.length};100`)
@@ -584,7 +590,7 @@ const calcularMediana = valores => {
     })
 
     let val = 0
-    if(valOrd.length % 2 == 0) {
+    if (valOrd.length % 2 == 0) {
         let num = valOrd.length / 2
         val = (valOrd[num - 1] + valOrd[num]) / 2
     } else {
@@ -609,19 +615,19 @@ const calcularDesvioPadrao = valores => {
 }
 
 const tabelaDados = questionarios => {
-    if(!toExcel)
+    if (!toExcel)
         console.log('Domínio                                           Média   Mediana Desvio Padrão')
     else
         console.log('Domínio;Média;Mediana;Desvio Padrão')
 
     dominios.forEach(dominio => {
-        let {descricao} = dominio
+        let { descricao } = dominio
         let total = 0
         let listResp = []
         pergdom = perguntas.filter(p => {
             return p.dominio === dominio.id
         }).map(p => {
-            return {numero: p.numero}
+            return { numero: p.numero }
         })
 
 
@@ -641,7 +647,7 @@ const tabelaDados = questionarios => {
         total = valores.reduce((tot, valor) => {
             return tot + valor
         })
-        if(!toExcel)
+        if (!toExcel)
             console.log(`${descricao}${fill(' ', 50 - descricao.length)}${formatarNumero(total / listResp.length)}     ` +
                 `${formatarNumero(calcularMediana(valores))} ${formatarNumero(calcularDesvioPadrao(valores))}`)
         else
@@ -669,9 +675,9 @@ cargos.forEach(cargo => {
     quests = questionarios.filter(q => {
         return q.cargo == cargo.id
     })
-    
-    if(quests.length > 0) {
-        if(!toExcel)
+
+    if (quests.length > 0) {
+        if (!toExcel)
             console.log(`Cargo: ${cargo.descricao}     Qtd Pessoas: ${quests.length}`)
         else
             console.log(`Cargo: ${cargo.descricao};Qtd Pessoas: ${quests.length}`)
@@ -694,12 +700,12 @@ const getDescCom = id => {
         return ''
 }
 const listarComunicacao = questionarios => {
-    if(questionarios.length == 0)
+    if (questionarios.length == 0)
         return
-    if(!toExcel)
+    if (!toExcel)
         console.log(`Descrição${fill(' ', 51)}Média`)
     else
-        console.log('Descrição;Média')
+        console.log('Descrição;Média;Mediana;Desvio Padrão')
     comunicacoes.forEach(com => {
         respostas = []
         questionarios.forEach(q => {
@@ -711,9 +717,9 @@ const listarComunicacao = questionarios => {
                 respostas.push(val)
             })
         })
-        if(respostas.length == 0)
+        if (respostas.length == 0)
             respostas = [0]
-        if(respostas.length > 0) {
+        if (respostas.length > 0) {
             total = respostas.reduce((tot, valor) => {
                 return tot + valor
             })
@@ -721,11 +727,12 @@ const listarComunicacao = questionarios => {
             total = 0
 
         let descCom = getDescCom(com.id)
-        if(!toExcel)
+        if (!toExcel)
             console.log(`${descCom}${fill(' ', 60 - descCom.length)}${formatarNumero(total / respostas.length)}${fill(' ', 5)}` +
                 `${formatarNumero(calcularDesvioPadrao(respostas))}`)
         else
-            console.log(`${descCom};${formatarNumero(total / respostas.length)};${formatarNumero(calcularDesvioPadrao(respostas))}`)
+            console.log(`${descCom};${formatarNumero(total / respostas.length)};${formatarNumero(calcularMediana(respostas))};` +
+                `${formatarNumero(calcularDesvioPadrao(respostas))}`)
     })
 }
 
@@ -738,16 +745,16 @@ cargos.forEach(cargo => {
     let quests = questionarios.filter(q => {
         return q.cargo == cargo.id
     })
-    if(quests.length > 0) {
-        if(!toExcel)
+    if (quests.length > 0) {
+        if (!toExcel)
             console.log(`Cargo: ${descricao}${fill(' ', 50 - descricao.length)}   Qtd:${quests.length}`)
         else
-        console.log(`Cargo: ${descricao};Qtd:${quests.length}`)
+            console.log(`Cargo: ${descricao};Qtd:${quests.length}`)
         listarComunicacao(quests)
     }
     console.log('')
 })
-if(!toExcel)
+if (!toExcel)
     console.log(`Geral${fill(' ', 55)}Qtd: ${questionarios.length}`)
 else
     console.log(`Geral;Qtd: ${questionarios.length}`)
@@ -760,7 +767,7 @@ const mediaExp = () => {
     let total = 0
     let tempo
     questionarios.forEach(q => {
-        if(q.exp.toLowerCase().match('mes') &&
+        if (q.exp.toLowerCase().match('mes') &&
             !q.exp.toLowerCase().match('ano')) {
             let txt = q.exp.replace('mes', '')
             txt = q.exp.replace('es', '')
@@ -775,11 +782,11 @@ const mediaExp = () => {
             txt = q.exp.replace('S', '')
             tempo = parseInt(txt, 10) || 0
             tempo = tempo * 12
-            
+
             total += tempo
         }
     })
-    
+
     console.log(total / questionarios.length / 12)
 }
 const percRegimeTrabalho = () => {
@@ -787,7 +794,7 @@ const percRegimeTrabalho = () => {
         let cont = questionarios.filter(q => {
             return q.regime === r.id
         }).length
-        if(!toExcel)
+        if (!toExcel)
             console.log(`${r.descricao}${fill(' ', 50 - r.descricao.length)}${cont}   ${formatarNumero(cont / questionarios.length * 100)}`)
         else
             console.log(`${r.descricao};${cont};${formatarNumero(cont / questionarios.length * 100)}`)
@@ -799,7 +806,7 @@ const percGrupoEtnico = () => {
         let cont = questionarios.filter(q => {
             return q.etnia === e.id
         }).length
-        if(!toExcel)
+        if (!toExcel)
             console.log(`${e.descricao}${fill(' ', 50 - e.descricao.length)}${cont}   ${formatarNumero(cont / questionarios.length * 100)}`)
         else
             console.log(`${e.descricao};${cont};${formatarNumero(cont / questionarios.length * 100)}`)
@@ -811,7 +818,7 @@ const percTurnos = () => {
         let cont = questionarios.filter(q => {
             return q.turno === t.id
         }).length
-        if(!toExcel)
+        if (!toExcel)
             console.log(`${t.descricao}${fill(' ', 50 - t.descricao.length)}${cont}   ${formatarNumero(cont / questionarios.length * 100)}`)
         else
             console.log(`${t.descricao};${cont};${formatarNumero(cont / questionarios.length * 100)}`)
@@ -828,3 +835,86 @@ console.log('\nPercentual Grupos Étnicos')
 percGrupoEtnico()
 console.log('\nPercentual Turnos')
 percTurnos()
+
+let com2 = [
+    { id: 1, descricao: "Cirurgião/Cirurgião Assistente" },
+    { id: 2, descricao: "Residente de Cirurgia ou Interno" },
+    { id: 3, descricao: "Instr./Circulante" },
+    { id: 4, descricao: "Anestesiologista/Anest.Assistente" },
+    { id: 5, descricao: "Enf. Assistencial" },
+    { id: 6, descricao: "Enf. Coordenador" },
+    { id: 7, descricao: "Equipe de apoio" }
+]
+
+let deparaCom = [
+    { id: 1, newId: 1 },
+    { id: 2, newId: 2 },
+    { id: 3, newId: 3 },
+    { id: 4, newId: 1 },
+    { id: 5, newId: 4 },
+    { id: 6, newId: 4 },
+    { id: 7, newId: 5 },
+    { id: 8, newId: 4 },
+    { id: 9, newId: 5 },
+    { id: 10, newId: 5 },
+    { id: 11, newId: 5 },
+    { id: 12, newId: 6 },
+    { id: 13, newId: 5 },
+    { id: 14, newId: 7 }
+]
+
+console.log('\n\n\n\n')
+console.log("Categoria Profissional;Média;Mediana;Desvio Padrão")
+com2.forEach(comNova => {
+    let arraycom = deparaCom.filter(c => {
+        return c.newId == comNova.id
+    })
+
+    let resp = []
+    let total = 0
+
+    arraycom.forEach(com => {
+        questionarios.forEach(q => {
+            q.comunicacoes.filter(c => {
+                return c.id == com.id && c.resposta < 5
+            }).map(respcom => {
+                return peso[respcom.resposta]
+            }).forEach(val => {
+                resp.push(val)
+            })
+        })
+    })
+
+    if (resp.length == 0)
+        resp = [0]
+
+    total = resp.reduce((tot, valor) => {
+        return tot + valor
+    })
+
+    console.log(`${comNova.descricao};` +
+        `${formatarNumero(total / resp.length)};`.replace('.', ',') +
+        `${formatarNumero(calcularMediana(resp))};` +
+        `${formatarNumero(calcularDesvioPadrao(resp))}`.replace('.', ',')
+    )
+})
+
+let totresp = []
+
+questionarios.forEach(q => {
+    q.comunicacoes.filter(c => {
+        return c.resposta < 5
+    }).map(resp => {
+        return peso[resp.resposta]
+    }).forEach(val => {
+        totresp.push(val)
+    })
+})
+
+let tottotal = totresp.reduce((tot, val) => {
+    return tot + val
+})
+console.log(`Total;${formatarNumero(tottotal / totresp.length)};`.replace('.', ',') +
+    `${formatarNumero(calcularMediana(totresp))};` +
+    `${formatarNumero(calcularDesvioPadrao(totresp))}`.replace('.', ',')
+)
